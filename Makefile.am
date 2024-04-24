@@ -83,10 +83,12 @@ EXTRA_DIST = \
 	.ci/osx-prepare.sh \
 	.cirrus.yml \
 	.editorconfig \
-	.github/workflows/build-and-test.yml \
 	.readthedocs.yaml \
 	appveyor.yml \
 	boot.sh \
+	.github/workflows/build-cn10k.yml \
+	DPDK_VERSION \
+	MRVL_VERSION \
 	poc/builders/Vagrantfile \
 	poc/playbook-centos-builder.yml \
 	poc/playbook-fedora-builder.yml \
