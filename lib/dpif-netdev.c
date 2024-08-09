@@ -5599,6 +5599,7 @@ dp_netdev_pmd_flush_output_packets(struct dp_netdev_pmd_thread *pmd,
 {
     struct tx_port *p;
     int output_cnt = 0;
+    bool dpdk_attached;
 
     if (!pmd->n_output_batches) {
         return 0;
@@ -5607,7 +5608,11 @@ dp_netdev_pmd_flush_output_packets(struct dp_netdev_pmd_thread *pmd,
     HMAP_FOR_EACH (p, node, &pmd->send_port_cache) {
         if (!dp_packet_batch_is_empty(&p->output_pkts)
             && (force || pmd->ctx.now >= p->flush_time)) {
+            if (pmd->core_id == NON_PMD_CORE_ID)
+                  dpdk_attached = dpdk_attach_thread(0);
             output_cnt += dp_netdev_pmd_flush_output_on_port(pmd, p);
+            if (dpdk_attached && pmd->core_id == NON_PMD_CORE_ID)
+                  dpdk_detach_thread();
         }
     }
     return output_cnt;
